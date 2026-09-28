@@ -109,7 +109,7 @@ body{
 .env{
   position:relative;
   width:min(84vw,360px);
-  aspect-ratio:1.5/1;
+  aspect-ratio:1.4/1;
   cursor:pointer; border:0; padding:0; background:none;
   appearance:none; -webkit-appearance:none;
   perspective:1200px; transform-style:preserve-3d;
@@ -142,13 +142,13 @@ body{
 .env__front{
   z-index:3;
   background:linear-gradient(160deg,#f7c3ce 0%, #eda7b8 100%);
-  clip-path:polygon(0 100%, 0 26%, 50% 70%, 100% 26%, 100% 100%);
+  clip-path:polygon(0 100%, 0 12%, 50% 54%, 100% 12%, 100% 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
 }
 .env__flap{
   z-index:5;
   background:linear-gradient(170deg,#f2b2c1 0%, #e498ab 100%);
-  clip-path:polygon(0 0, 100% 0, 50% 72%);
+  clip-path:polygon(0 0, 100% 0, 50% 56%);
   transform-origin:top center;
   transition:transform .8s cubic-bezier(.45,.05,.3,1), z-index 0s linear .4s;
 }
@@ -156,25 +156,65 @@ body{
 
 .seal{
   position:absolute; z-index:6;
-  top:58%; left:50%; transform:translate(-50%,-50%);
-  width:clamp(46px,13vw,58px); aspect-ratio:1; border-radius:50%;
+  top:56%; left:50%; transform:translate(-50%,-50%);
+  width:clamp(40px,10.5vw,50px); aspect-ratio:1; border-radius:50%;
   display:grid; place-items:center; pointer-events:none;
   background:radial-gradient(circle at 34% 30%, #e88ca0 0%, var(--rose-deep) 58%, #9c4159 100%);
-  color:#fff7f9; font-size:clamp(17px,4.6vw,21px);
+  color:#fff7f9; font-size:clamp(15px,4vw,19px);
   box-shadow:0 6px 18px -6px rgba(140,55,75,.75), inset 0 2px 5px rgba(255,255,255,.35);
   transition:transform .45s ease, opacity .45s ease;
 }
 .env.open .seal{transform:translate(-50%,-50%) scale(.2) rotate(120deg); opacity:0}
 
+/* ---- postage stamp (sits on the front, clear of the flap) ---- */
+.env__stamp{
+  position:absolute; z-index:4; pointer-events:none;
+  left:9%; top:38%; width:15%;
+  transform:rotate(-3.5deg);
+  filter:drop-shadow(0 3px 6px rgba(150,70,88,.28));
+}
+.env__stamp svg{display:block; width:100%; height:auto}
+
+/* ---- her name, written by hand ---- */
+.env__postmark{
+  position:absolute; z-index:5; pointer-events:none;
+  left:17%; top:44%; width:22%;
+  transform:rotate(-13deg); opacity:.24;
+}
+.env__postmark svg{display:block; width:100%; height:auto; overflow:visible}
+
+.env__name{
+  position:absolute; z-index:4; pointer-events:none;
+  inset-inline:8%; bottom:4%; height:31%;
+  width:84%; overflow:visible;
+}
+.env__to{
+  font-family:'Outfit',sans-serif; font-size:17px; font-weight:400;
+  letter-spacing:.14em; fill:#a95f74; opacity:0;
+  transition:opacity .9s ease .25s;
+}
+.env__name.armed .env__to{opacity:.62}
+.env__nameText{
+  font-family:'Cormorant Garamond',serif; font-weight:600; font-size:56px;
+  fill:#7c3c52;
+}
+html[lang="ur"] .env__to{font-family:'Noto Nastaliq Urdu',serif; font-size:15px; letter-spacing:0}
+html[lang="ur"] .env__nameText{font-family:'Noto Nastaliq Urdu',serif; font-size:44px}
+html[lang="ar"] .env__to{font-family:'Amiri',serif; font-size:18px; letter-spacing:0}
+html[lang="ar"] .env__nameText{font-family:'Amiri',serif; font-size:58px}
+.nib{opacity:0; transition:opacity .45s ease}
+.nib ellipse{fill:#5d2c3d}
+.nib circle{fill:#7c3c52; opacity:.35}
+
 .hint{
   margin:0; text-align:center;
   color:var(--ink-soft); font-size:.95rem; letter-spacing:.04em;
-  animation:pulse 2.6s ease-in-out infinite;
-  transition:opacity .35s;
+  opacity:0; transition:opacity .7s ease;
 }
+#stage.written .hint{opacity:1; animation:pulse 2.6s ease-in-out .3s infinite}
 .hint .tap-ico{display:block; font-size:1.3rem; margin-bottom:6px; opacity:.8}
 @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
-#stage.opening .hint{opacity:0}
+#stage.opening .hint{opacity:0; animation:none}
 
 /* ================== LETTER ================== */
 #letterScreen{
@@ -362,6 +402,46 @@ html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
       <span class="env__paper"></span>
       <span class="env__front"></span>
       <span class="env__flap"></span>
+      <span class="env__stamp" aria-hidden="true">
+        <svg viewBox="0 0 64 78">
+          <rect x="2" y="2" width="60" height="74" rx="3" fill="#fffaf6"/>
+          <rect x="2" y="2" width="60" height="74" rx="3" fill="none"
+                stroke="#f2b7c6" stroke-width="4.6" stroke-dasharray="0 7.6" stroke-linecap="round"/>
+          <rect x="8" y="8" width="48" height="62" rx="2" fill="#f9d3dc"/>
+          <path d="M32 46c-9-6-13-11-13-16a6.6 6.6 0 0 1 13-2.6A6.6 6.6 0 0 1 45 30c0 5-4 10-13 16z" fill="#c05f77"/>
+          <text x="32" y="62" text-anchor="middle" font-family="Amiri, serif" font-size="9" fill="#a95f74">&#1605;&#1581;&#1576;&#1578;</text>
+        </svg>
+      </span>
+
+      <span class="env__postmark" aria-hidden="true">
+        <svg viewBox="0 0 96 56">
+          <g fill="none" stroke="#7a3347" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="28" cy="28" r="24"/>
+            <circle cx="28" cy="28" r="18.5" stroke-width="1.4"/>
+            <path d="M56 17c8-4 16 4 24 0M56 28c8-4 16 4 24 0M56 39c8-4 16 4 24 0"/>
+          </g>
+        </svg>
+      </span>
+
+      <svg class="env__name" id="envName" viewBox="0 0 400 150" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <mask id="penMask" maskUnits="userSpaceOnUse" x="-60" y="-60" width="520" height="270">
+            <path id="penPath" fill="none" stroke="#fff" stroke-width="180"
+                  stroke-linecap="round" stroke-linejoin="round"
+                  stroke-dasharray="9999" stroke-dashoffset="9999"
+                  d="M -40 100 C 60 82, 120 76, 200 71 S 330 62, 440 52"/>
+          </mask>
+        </defs>
+        <text class="env__to" id="envTo" x="200" y="26" text-anchor="middle"></text>
+        <g mask="url(#penMask)">
+          <text class="env__nameText" id="envNameText" x="200" y="104" text-anchor="middle"></text>
+        </g>
+        <g class="nib" id="nib">
+          <circle r="9"/>
+          <ellipse rx="3" ry="7"/>
+        </g>
+      </svg>
+
       <span class="seal" aria-hidden="true">&#10084;</span>
     </button>
   </div>
@@ -420,6 +500,7 @@ const CONTENT = {
   en: {
     dir: "ltr",
     tapHint: "Tap to open",
+    toLabel: "To",
     greeting: "Assalamu Alaikum, {to} —",
     before: [
       "Long before I knew your name, I was already asking Allah for you. I did not know your face, or the sound of your laugh, or the particular way you say my name when you are half asleep. But He knew. And while I was still learning how to ask, He had already written you into my life.",
@@ -451,6 +532,7 @@ const CONTENT = {
   ur: {
     dir: "rtl",
     tapHint: "کھولنے کے لیے چھوئیں",
+    toLabel: "بنام",
     greeting: "السلام علیکم، {to} —",
     before: [
       "تمہارا نام جاننے سے بہت پہلے، میں اللہ سے تمہیں مانگ رہا تھا۔ نہ تمہارا چہرہ معلوم تھا، نہ تمہاری ہنسی کی آواز، اور نہ وہ انداز جس سے تم نیم خوابی میں میرا نام لیتی ہو۔ مگر اُسے سب معلوم تھا۔ اور جب میں مانگنا سیکھ ہی رہا تھا، وہ تمہیں میری زندگی میں لکھ چکا تھا۔",
@@ -482,6 +564,7 @@ const CONTENT = {
   ar: {
     dir: "rtl",
     tapHint: "المسي لتفتحي الرسالة",
+    toLabel: "إلى",
     greeting: "السلامُ عليكِ، {to} —",
     before: [
       "قبل أن أعرفَ اسمَكِ بزمنٍ طويل، كنتُ أسألُ اللهَ أن يرزقَني إيّاكِ. لم أكن أعرفُ وجهَكِ، ولا صوتَ ضحكتِكِ، ولا تلك الطريقةَ التي تنادينَني بها وأنتِ بين النومِ واليقظة. لكنّه سبحانه كان يعلم. وبينما كنتُ أتعلّمُ كيف أسأل، كان قد كتبَكِ في حياتي.",
@@ -526,7 +609,12 @@ const els = {
   verseTr: $("#verseTr"),
   verseRef: $("#verseRef"),
   sign: $("#sign"),
-  verse: $(".verse")
+  verse: $(".verse"),
+  envName: $("#envName"),
+  envTo: $("#envTo"),
+  envNameText: $("#envNameText"),
+  penPath: $("#penPath"),
+  nib: $("#nib")
 };
 
 let lang = "en";
@@ -584,6 +672,8 @@ function applyLang(next, animate) {
   els.verseTr.hidden = !c.verseTr;
   els.verseRef.textContent = c.verseRef;
   els.sign.textContent = CONFIG.from[lang];
+  els.envTo.textContent = c.toLabel;
+  els.envNameText.textContent = CONFIG.to[lang];
 
   try { localStorage.setItem("letter-lang", lang); } catch (e) {}
 
@@ -609,7 +699,9 @@ function staggerReveal() {
 els.langs.addEventListener("click", e => {
   const btn = e.target.closest("button[data-lang]");
   if (!btn || btn.dataset.lang === lang) return;
-  applyLang(btn.dataset.lang, !$("#letterScreen").hidden);
+  const onEnvelope = $("#letterScreen").hidden;
+  applyLang(btn.dataset.lang, !onEnvelope);
+  if (onEnvelope) writeName();
 });
 
 /* ==========================================================
@@ -643,6 +735,55 @@ function openLetter() {
   }, t1);
 }
 
+/* ---- her name, written by a pen ------------------------------------
+   The glyphs come from the real Nastaliq/Amiri font; a thick stroke
+   along penPath is used as a mask, so the name only appears where the
+   nib has already travelled. Urdu and Arabic reveal right-to-left,
+   English left-to-right.
+   ------------------------------------------------------------------ */
+let penLen = 0, writeRaf = null;
+
+const easeWrite = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+function setPen(p) {
+  const rtl = CONTENT[lang].dir === "rtl";
+  els.penPath.style.strokeDashoffset = String((rtl ? penLen : -penLen) * (1 - p));
+  const at = els.penPath.getPointAtLength((rtl ? 1 - p : p) * penLen);
+  els.nib.setAttribute("transform",
+    "translate(" + at.x.toFixed(1) + " " + at.y.toFixed(1) + ") rotate(" + (rtl ? 34 : -34) + ")");
+}
+
+function writeName() {
+  if (writeRaf) cancelAnimationFrame(writeRaf);
+  penLen = els.penPath.getTotalLength();
+  els.penPath.style.strokeDasharray = penLen;
+  els.envName.classList.add("armed");
+
+  if (reduced) {
+    setPen(1);
+    els.nib.style.opacity = 0;
+    stage.classList.add("written");
+    return;
+  }
+
+  stage.classList.remove("written");
+  els.nib.style.opacity = 1;
+  setPen(0);
+
+  const DELAY = 620, DUR = 2100, t0 = performance.now();
+  (function step(t) {
+    const raw = (t - t0 - DELAY) / DUR;
+    setPen(easeWrite(Math.min(Math.max(raw, 0), 1)));
+    if (raw < 1) {
+      writeRaf = requestAnimationFrame(step);
+    } else {
+      writeRaf = null;
+      els.nib.style.opacity = 0;
+      stage.classList.add("written");
+    }
+  })(t0);
+}
+
 function reseal() {
   letterScreen.hidden = true;
   stage.hidden = false;
@@ -651,6 +792,7 @@ function reseal() {
   env.classList.remove("open");
   window.scrollTo({ top: 0, behavior: "auto" });
   env.focus({ preventScroll: true });
+  writeName();
 }
 
 env.addEventListener("click", openLetter);
@@ -807,6 +949,12 @@ if (reduced) {
   start();
 }
 applyLang(pickInitialLang(), false);
+
+const fontsReady = (document.fonts && document.fonts.ready)
+  ? document.fonts.ready
+  : Promise.resolve();
+Promise.race([fontsReady, new Promise(r => setTimeout(r, 2500))]).then(writeName);
+setTimeout(() => stage.classList.add("written"), 5200);   // hint shows up regardless
 </script>
 </body>
 </html>

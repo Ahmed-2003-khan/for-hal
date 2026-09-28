@@ -22,7 +22,7 @@ const CONFIG = {
 };
 ```
 
-- `to`   → greeting mein aayega (`Assalamu Alaikum, {to} —`)
+- `to`   → greeting mein **aur lifafe par likhe jane wale naam** mein aayega
 - `from` → letter ke akhir mein signature
 - `date` → greeting ke upar chhoti si line
 
@@ -88,6 +88,10 @@ https://<USERNAME>.github.io/<REPO>/
   dono mirror ho jate hain.
 - **Envelope animation** — sealed envelope, wax seal, flap khulta hai, khat upar
   uthta hai. "Close the letter" se dobara seal ho jata hai.
+- **Naam khud likhta hai** — lifafe par «بنام / حلیمہ» qalam se likha jata hai.
+  Asli font ke glyphs ko ek moti stroke (`#penPath`) se mask kiya gaya hai, to
+  naam sirf wahan zahir hota hai jahan nib guzar chuki ho. Urdu/Arabic dayen se
+  bayen, English bayen se dayen. Raftaar: `DUR` / `DELAY` in `writeName()`.
 - **Petals + hearts** — halka canvas engine, tab background mein jaye to khud ruk
   jata hai (battery bachane ke liye).
 - **Mobile-first** — `svh` units, safe-area insets (iPhone notch), 46px+ tap
