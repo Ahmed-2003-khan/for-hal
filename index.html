@@ -142,13 +142,13 @@ body{
 .env__front{
   z-index:3;
   background:linear-gradient(160deg,#f7c3ce 0%, #eda7b8 100%);
-  clip-path:polygon(0 100%, 0 12%, 50% 54%, 100% 12%, 100% 100%);
+  clip-path:polygon(0 100%, 0 8%, 50% 42%, 100% 8%, 100% 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
 }
 .env__flap{
   z-index:5;
   background:linear-gradient(170deg,#f2b2c1 0%, #e498ab 100%);
-  clip-path:polygon(0 0, 100% 0, 50% 56%);
+  clip-path:polygon(0 0, 100% 0, 50% 44%);
   transform-origin:top center;
   transition:transform .8s cubic-bezier(.45,.05,.3,1), z-index 0s linear .4s;
 }
@@ -156,11 +156,11 @@ body{
 
 .seal{
   position:absolute; z-index:6;
-  top:56%; left:50%; transform:translate(-50%,-50%);
-  width:clamp(40px,10.5vw,50px); aspect-ratio:1; border-radius:50%;
+  top:42%; left:50%; transform:translate(-50%,-50%);
+  width:clamp(34px,9vw,44px); aspect-ratio:1; border-radius:50%;
   display:grid; place-items:center; pointer-events:none;
   background:radial-gradient(circle at 34% 30%, #e88ca0 0%, var(--rose-deep) 58%, #9c4159 100%);
-  color:#fff7f9; font-size:clamp(15px,4vw,19px);
+  color:#fff7f9; font-size:clamp(13px,3.4vw,17px);
   box-shadow:0 6px 18px -6px rgba(140,55,75,.75), inset 0 2px 5px rgba(255,255,255,.35);
   transition:transform .45s ease, opacity .45s ease;
 }
@@ -169,7 +169,7 @@ body{
 /* ---- postage stamp (sits on the front, clear of the flap) ---- */
 .env__stamp{
   position:absolute; z-index:4; pointer-events:none;
-  left:9%; top:38%; width:15%;
+  left:8%; top:26%; width:13%;
   transform:rotate(-3.5deg);
   filter:drop-shadow(0 3px 6px rgba(150,70,88,.28));
 }
@@ -178,33 +178,27 @@ body{
 /* ---- her name, written by hand ---- */
 .env__postmark{
   position:absolute; z-index:5; pointer-events:none;
-  left:17%; top:44%; width:22%;
+  left:15%; top:31%; width:19%;
   transform:rotate(-13deg); opacity:.24;
 }
 .env__postmark svg{display:block; width:100%; height:auto; overflow:visible}
 
-.env__name{
+.env__addr{
   position:absolute; z-index:4; pointer-events:none;
-  inset-inline:8%; bottom:4%; height:31%;
-  width:84%; overflow:visible;
+  inset-inline:6%; bottom:3%; height:44%;
+  display:flex; flex-direction:column; align-items:center; gap:1%;
 }
 .env__to{
-  font-family:'Outfit',sans-serif; font-size:17px; font-weight:400;
-  letter-spacing:.14em; fill:#a95f74; opacity:0;
-  transition:opacity .9s ease .25s;
+  flex:0 0 auto;
+  font-family:'Outfit',sans-serif; font-size:clamp(9px,2.4vw,12px);
+  letter-spacing:.18em; color:#a95f74; opacity:0;
+  transition:opacity .9s ease .2s;
 }
-.env__name.armed .env__to{opacity:.62}
-.env__nameText{
-  font-family:'Cormorant Garamond',serif; font-weight:600; font-size:56px;
-  fill:#7c3c52;
-}
-html[lang="ur"] .env__to{font-family:'Noto Nastaliq Urdu',serif; font-size:15px; letter-spacing:0}
-html[lang="ur"] .env__nameText{font-family:'Noto Nastaliq Urdu',serif; font-size:44px}
-html[lang="ar"] .env__to{font-family:'Amiri',serif; font-size:18px; letter-spacing:0}
-html[lang="ar"] .env__nameText{font-family:'Amiri',serif; font-size:58px}
-.nib{opacity:0; transition:opacity .45s ease}
-.nib ellipse{fill:#5d2c3d}
-.nib circle{fill:#7c3c52; opacity:.35}
+.env__addr.armed .env__to{opacity:.6}
+html[lang="ur"] .env__to{font-family:'Noto Nastaliq Urdu',serif; letter-spacing:0; line-height:1.9}
+html[lang="ar"] .env__to{font-family:'Amiri',serif; letter-spacing:.04em}
+.env__nameCv{flex:1 1 0%; display:block; width:100%; min-height:0}
+
 
 .hint{
   margin:0; text-align:center;
@@ -423,24 +417,10 @@ html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
         </svg>
       </span>
 
-      <svg class="env__name" id="envName" viewBox="0 0 400 150" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <mask id="penMask" maskUnits="userSpaceOnUse" x="-60" y="-60" width="520" height="270">
-            <path id="penPath" fill="none" stroke="#fff" stroke-width="180"
-                  stroke-linecap="round" stroke-linejoin="round"
-                  stroke-dasharray="9999" stroke-dashoffset="9999"
-                  d="M -40 100 C 60 82, 120 76, 200 71 S 330 62, 440 52"/>
-          </mask>
-        </defs>
-        <text class="env__to" id="envTo" x="200" y="26" text-anchor="middle"></text>
-        <g mask="url(#penMask)">
-          <text class="env__nameText" id="envNameText" x="200" y="104" text-anchor="middle"></text>
-        </g>
-        <g class="nib" id="nib">
-          <circle r="9"/>
-          <ellipse rx="3" ry="7"/>
-        </g>
-      </svg>
+      <span class="env__addr" id="envAddr" aria-hidden="true">
+        <span class="env__to" id="envTo"></span>
+        <canvas class="env__nameCv" id="nameCv"></canvas>
+      </span>
 
       <span class="seal" aria-hidden="true">&#10084;</span>
     </button>
@@ -487,6 +467,12 @@ html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
 const CONFIG = {
   // Who it is for (used inside the greeting)
   to:   { en: "Halima", ur: "حلیمہ", ar: "حليمة" },
+  // What the pen writes on the envelope — one array entry per line
+  envelope: {
+    en: ["My love,", "Halima"],
+    ur: ["میری جان", "حلیمہ"],
+    ar: ["حبيبتي", "حليمة"]
+  },
   // Who it is from (the signature)
   from: { en: "Ahmed",  ur: "احمد",  ar: "أحمد" },
   // Small line above the greeting
@@ -610,11 +596,9 @@ const els = {
   verseRef: $("#verseRef"),
   sign: $("#sign"),
   verse: $(".verse"),
-  envName: $("#envName"),
+  addr: $("#envAddr"),
   envTo: $("#envTo"),
-  envNameText: $("#envNameText"),
-  penPath: $("#penPath"),
-  nib: $("#nib")
+  nameCv: $("#nameCv")
 };
 
 let lang = "en";
@@ -673,7 +657,6 @@ function applyLang(next, animate) {
   els.verseRef.textContent = c.verseRef;
   els.sign.textContent = CONFIG.from[lang];
   els.envTo.textContent = c.toLabel;
-  els.envNameText.textContent = CONFIG.to[lang];
 
   try { localStorage.setItem("letter-lang", lang); } catch (e) {}
 
@@ -735,53 +718,323 @@ function openLetter() {
   }, t1);
 }
 
-/* ---- her name, written by a pen ------------------------------------
-   The glyphs come from the real Nastaliq/Amiri font; a thick stroke
-   along penPath is used as a mask, so the name only appears where the
-   nib has already travelled. Urdu and Arabic reveal right-to-left,
-   English left-to-right.
+/* ---- the qalam ------------------------------------------------------
+   Her name is drawn offscreen in the real Nastaliq face, then the ink
+   is split into connected components. The big ones are strokes; the
+   small isolated ones are the nuqte. The nib sweeps each line column by
+   column, riding the actual ink — so it climbs the alif and dips into
+   the descenders — and the dots are only tapped in afterwards, the way
+   a khattat writes. Works for any string in any of the three scripts.
    ------------------------------------------------------------------ */
-let penLen = 0, writeRaf = null;
+const nctx = els.nameCv.getContext("2d");
+const INK = "#6c2f45";
+
+let scene = null, penRaf = null, penToken = 0;
 
 const easeWrite = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
-function setPen(p) {
-  const rtl = CONTENT[lang].dir === "rtl";
-  els.penPath.style.strokeDashoffset = String((rtl ? penLen : -penLen) * (1 - p));
-  const at = els.penPath.getPointAtLength((rtl ? 1 - p : p) * penLen);
-  els.nib.setAttribute("transform",
-    "translate(" + at.x.toFixed(1) + " " + at.y.toFixed(1) + ") rotate(" + (rtl ? 34 : -34) + ")");
+function fontFor(px) {
+  if (lang === "ur") return '600 ' + px + 'px "Noto Nastaliq Urdu", serif';
+  if (lang === "ar") return '700 ' + px + 'px "Amiri", serif';
+  return '600 ' + px + 'px "Cormorant Garamond", serif';
 }
 
-function writeName() {
-  if (writeRaf) cancelAnimationFrame(writeRaf);
-  penLen = els.penPath.getTotalLength();
-  els.penPath.style.strokeDasharray = penLen;
-  els.envName.classList.add("armed");
+function offscreen(w, h) {
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  return c;
+}
 
-  if (reduced) {
-    setPen(1);
-    els.nib.style.opacity = 0;
-    stage.classList.add("written");
-    return;
-  }
+function buildScene() {
+  const box = els.nameCv.getBoundingClientRect();
+  if (box.width < 40 || box.height < 20) return null;
 
-  stage.classList.remove("written");
-  els.nib.style.opacity = 1;
-  setPen(0);
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const W = Math.min(Math.round(box.width * dpr), 1100);
+  const H = Math.max(Math.round(W * box.height / box.width), 40);
+  els.nameCv.width = W; els.nameCv.height = H;
 
-  const DELAY = 620, DUR = 2100, t0 = performance.now();
-  (function step(t) {
-    const raw = (t - t0 - DELAY) / DUR;
-    setPen(easeWrite(Math.min(Math.max(raw, 0), 1)));
-    if (raw < 1) {
-      writeRaf = requestAnimationFrame(step);
-    } else {
-      writeRaf = null;
-      els.nib.style.opacity = 0;
-      stage.classList.add("written");
+  const lines = CONFIG.envelope[lang];
+  const rtl = CONTENT[lang].dir === "rtl";
+
+  /* fit both lines into the box */
+  const probe = 120;
+  nctx.font = fontFor(probe);
+  nctx.textAlign = "center";
+  nctx.textBaseline = "alphabetic";
+  const m = lines.map(t => nctx.measureText(t));
+  const asc = m.map(x => x.actualBoundingBoxAscent || probe * .8);
+  const dsc = m.map(x => x.actualBoundingBoxDescent || probe * .3);
+  const gap = probe * .14;
+  const stackH = asc.concat(dsc).reduce((a, b) => a + b, 0) + gap * (lines.length - 1);
+  const widest = Math.max.apply(null, m.map(x => x.width));
+  const size = probe * Math.min((W * .92) / widest, (H * .94) / stackH);
+  const k = size / probe;
+
+  /* lay the ink down */
+  const full = offscreen(W, H);
+  const fctx = full.getContext("2d", { willReadFrequently: true });
+  fctx.font = fontFor(size);
+  fctx.textAlign = "center";
+  fctx.textBaseline = "alphabetic";
+  fctx.fillStyle = INK;
+
+  const bands = [];
+  let cursor = (H - stackH * k) / 2;
+  lines.forEach((t, i) => {
+    const base = cursor + asc[i] * k;
+    fctx.fillText(t, W / 2, base);
+    bands.push([Math.max(0, Math.floor(cursor) - 1), Math.min(H, Math.ceil(base + dsc[i] * k) + 1)]);
+    cursor = base + dsc[i] * k + gap * k;
+  });
+
+  /* label the connected blobs of ink */
+  const a = fctx.getImageData(0, 0, W, H).data;
+  const N = W * H, CUT = 26;
+  const label = new Int32Array(N).fill(-1);
+  const stack = new Int32Array(N);
+  const comps = [];
+  for (let i = 0; i < N; i++) {
+    if (a[i * 4 + 3] < CUT || label[i] !== -1) continue;
+    const c = { x0: W, y0: H, x1: 0, y1: 0, area: 0, sy: 0 };
+    let sp = 0; stack[sp++] = i; label[i] = comps.length;
+    while (sp) {
+      const q = stack[--sp], qx = q % W, qy = (q / W) | 0;
+      c.area++; c.sy += qy;
+      if (qx < c.x0) c.x0 = qx;
+      if (qx > c.x1) c.x1 = qx;
+      if (qy < c.y0) c.y0 = qy;
+      if (qy > c.y1) c.y1 = qy;
+      for (let dy = -1; dy <= 1; dy++) {
+        const ny = qy + dy; if (ny < 0 || ny >= H) continue;
+        for (let dx = -1; dx <= 1; dx++) {
+          const nx = qx + dx; if (nx < 0 || nx >= W) continue;
+          const n = ny * W + nx;
+          if (label[n] === -1 && a[n * 4 + 3] >= CUT) { label[n] = comps.length; stack[sp++] = n; }
+        }
+      }
     }
+    comps.push(c);
+  }
+  if (!comps.length) return null;
+
+  /* a nuqta is small, and small in both directions — an alif is not */
+  const maxArea = comps.reduce((mx, c) => Math.max(mx, c.area), 1);
+  const lineH = stackH * k / lines.length;
+  const isDot = comps.map(c =>
+    c.area < maxArea * .10 &&
+    (c.x1 - c.x0) < lineH * .34 &&
+    (c.y1 - c.y0) < lineH * .34);
+
+  const mid = bands.map(b => (b[0] + b[1]) / 2);
+  const ofLine = comps.map(c => {
+    const cy = c.sy / c.area;
+    let best = 0, bd = Infinity;
+    mid.forEach((mv, i) => { const d = Math.abs(cy - mv); if (d < bd) { bd = d; best = i; } });
+    return best;
+  });
+
+  /* split the ink into a strokes layer and a nuqte layer */
+  const src = fctx.getImageData(0, 0, W, H).data;
+  const mainImg = fctx.createImageData(W, H);
+  const dotImg = fctx.createImageData(W, H);
+  const sumA = lines.map(() => new Float32Array(W));
+  const sumY = lines.map(() => new Float32Array(W));
+  for (let i = 0; i < N; i++) {
+    const id = label[i]; if (id === -1) continue;
+    const dst = isDot[id] ? dotImg.data : mainImg.data;
+    const o = i * 4;
+    dst[o] = src[o]; dst[o + 1] = src[o + 1]; dst[o + 2] = src[o + 2]; dst[o + 3] = src[o + 3];
+    if (!isDot[id]) {
+      const li = ofLine[id], x = i % W, al = src[o + 3];
+      sumA[li][x] += al; sumY[li][x] += al * ((i / W) | 0);
+    }
+  }
+  const mainCv = offscreen(W, H); mainCv.getContext("2d").putImageData(mainImg, 0, 0);
+  const dotCv = offscreen(W, H); dotCv.getContext("2d").putImageData(dotImg, 0, 0);
+
+  const dotsByLine = lines.map(() => []);
+  comps.forEach((c, id) => {
+    if (!isDot[id]) return;
+    dotsByLine[ofLine[id]].push({
+      x: c.x0, y: c.y0, w: c.x1 - c.x0 + 1, h: c.y1 - c.y0 + 1,
+      cx: (c.x0 + c.x1) / 2 + .5, cy: (c.y0 + c.y1) / 2 + .5
+    });
+  });
+
+  /* per line: where the ink is, and the path the nib rides */
+  const linesData = lines.map((t, i) => {
+    const A = sumA[i], Y = sumY[i];
+    const ys = new Float32Array(W);
+    let x0 = -1, x1 = -1;
+    for (let x = 0; x < W; x++) {
+      if (A[x] > 0) { ys[x] = Y[x] / A[x]; if (x0 < 0) x0 = x; x1 = x; }
+      else ys[x] = NaN;
+    }
+    if (x0 < 0) { x0 = 0; x1 = W - 1; ys.fill(H / 2); }
+    let last = ys[x0];
+    for (let x = x0; x <= x1; x++) { if (isNaN(ys[x])) ys[x] = last; else last = ys[x]; }
+    const sm = new Float32Array(W);
+    const R = Math.max(2, Math.round(W * .012));
+    for (let x = x0; x <= x1; x++) {
+      let s = 0, n = 0;
+      for (let d = -R; d <= R; d++) { const q = x + d; if (q < x0 || q > x1) continue; s += ys[q]; n++; }
+      sm[x] = s / n;
+    }
+    return {
+      band: bands[i], x0: x0, x1: x1, ys: sm,
+      dots: dotsByLine[i].sort((p, q) => rtl ? q.cx - p.cx : p.cx - q.cx),
+      yAt: function (x) {
+        const q = Math.min(Math.max(Math.round(x), this.x0), this.x1);
+        return this.ys[q] || H / 2;
+      }
+    };
+  });
+
+  /* the timeline: write a line, tap its dots, lift to the next */
+  const segs = [];
+  let t = 0;
+  linesData.forEach((L, i) => {
+    if (i > 0) {
+      const prev = linesData[i - 1];
+      const px = rtl ? prev.x0 : prev.x1, nx = rtl ? L.x1 : L.x0;
+      segs.push({
+        kind: "move", line: i, t0: t, dur: 300,
+        from: { x: px, y: prev.yAt(px) }, to: { x: nx, y: L.yAt(nx) }
+      });
+      t += 300;
+    }
+    const dur = 420 + (L.x1 - L.x0) / W * 1050;
+    segs.push({ kind: "write", line: i, t0: t, dur: dur });
+    t += dur;
+    if (L.dots.length) {
+      const dd = 78 * L.dots.length + 110;
+      segs.push({ kind: "dots", line: i, t0: t, dur: dd });
+      t += dd;
+    }
+  });
+
+  return {
+    W: W, H: H, rtl: rtl, main: mainCv, dots: dotCv,
+    lines: linesData, segs: segs, total: t, nib: Math.max(8, size * .20)
+  };
+}
+
+function drawMain(L, x) {
+  nctx.save();
+  nctx.beginPath();
+  const b0 = L.band[0], bh = L.band[1] - L.band[0];
+  if (x === null) nctx.rect(0, b0, scene.W, bh);
+  else if (scene.rtl) nctx.rect(x, b0, scene.W - x, bh);
+  else nctx.rect(0, b0, x, bh);
+  nctx.clip();
+  nctx.drawImage(scene.main, 0, 0);
+  nctx.restore();
+}
+
+function drawDots(L, n) {
+  for (let i = 0; i < L.dots.length; i++) {
+    const d = L.dots[i];
+    const k = Math.min(Math.max(n - i, 0), 1);
+    if (k <= 0) continue;
+    const e = 1 - Math.pow(1 - k, 3);
+    const w = d.w * (.55 + .45 * e), h = d.h * (.55 + .45 * e);
+    nctx.globalAlpha = e;
+    nctx.drawImage(scene.dots, d.x, d.y, d.w, d.h, d.cx - w / 2, d.cy - h / 2, w, h);
+  }
+  nctx.globalAlpha = 1;
+}
+
+function drawNib(x, y, alpha) {
+  const s = scene.nib;
+  nctx.save();
+  nctx.globalAlpha = alpha;
+  nctx.translate(x, y);
+  nctx.rotate(-0.62);
+  nctx.fillStyle = "rgba(108,47,69,.28)";
+  nctx.beginPath(); nctx.arc(0, 0, s * .6, 0, 6.2832); nctx.fill();
+  const g = nctx.createLinearGradient(0, -s * 7.2, 0, 0);
+  g.addColorStop(0, "#d2a46b"); g.addColorStop(.55, "#8d6036"); g.addColorStop(1, "#573620");
+  nctx.fillStyle = g;
+  nctx.beginPath();
+  nctx.moveTo(-s * .62, -s * 7.4); nctx.lineTo(s * .62, -s * 7.4);
+  nctx.lineTo(s * .44, -s * 1.2); nctx.lineTo(-s * .44, -s * 1.2);
+  nctx.closePath(); nctx.fill();
+  nctx.fillStyle = "#3b2130";
+  nctx.beginPath();
+  nctx.moveTo(-s * .44, -s * 1.2); nctx.lineTo(s * .44, -s * 1.2);
+  nctx.lineTo(s * .17, 0); nctx.lineTo(-s * .17, 0);
+  nctx.closePath(); nctx.fill();
+  nctx.strokeStyle = "rgba(255,255,255,.3)";
+  nctx.lineWidth = Math.max(1, s * .09);
+  nctx.beginPath(); nctx.moveTo(0, -s * 1.1); nctx.lineTo(0, -s * .2); nctx.stroke();
+  nctx.restore();
+}
+
+function paintPen(time, showNib) {
+  if (!scene) return;
+  nctx.clearRect(0, 0, scene.W, scene.H);
+  let nib = null;
+  for (let i = 0; i < scene.segs.length; i++) {
+    const seg = scene.segs[i];
+    if (time < seg.t0) break;
+    const L = scene.lines[seg.line];
+    const done = time >= seg.t0 + seg.dur;
+    const p = done ? 1 : (time - seg.t0) / seg.dur;
+    if (seg.kind === "write") {
+      const e = easeWrite(p);
+      const x = scene.rtl ? L.x1 - (L.x1 - L.x0) * e : L.x0 + (L.x1 - L.x0) * e;
+      drawMain(L, done ? null : x);
+      if (!done) nib = { x: x, y: L.yAt(x), a: 1 };
+    } else if (seg.kind === "dots") {
+      drawDots(L, p * L.dots.length);
+      if (!done) {
+        const d = L.dots[Math.min(Math.floor(p * L.dots.length), L.dots.length - 1)];
+        if (d) nib = { x: d.cx, y: d.cy, a: 1 };
+      }
+    } else if (!done) {
+      nib = {
+        x: seg.from.x + (seg.to.x - seg.from.x) * p,
+        y: seg.from.y + (seg.to.y - seg.from.y) * p - scene.H * .2 * Math.sin(Math.PI * p),
+        a: .5
+      };
+    }
+  }
+  if (showNib && nib) drawNib(nib.x, nib.y, nib.a);
+}
+
+function runPen(token) {
+  if (penRaf) cancelAnimationFrame(penRaf);
+  if (reduced) { paintPen(scene.total, false); stage.classList.add("written"); return; }
+  stage.classList.remove("written");
+  const DELAY = 480, t0 = performance.now();
+  (function step(now) {
+    if (token !== penToken) return;
+    const t = Math.max(now - t0 - DELAY, 0);
+    paintPen(t, true);
+    if (t < scene.total) penRaf = requestAnimationFrame(step);
+    else { penRaf = null; stage.classList.add("written"); }
   })(t0);
+}
+
+async function writeName() {
+  const token = ++penToken;
+  els.addr.classList.add("armed");
+  try {
+    if (document.fonts && document.fonts.load) {
+      await document.fonts.load(fontFor(64), CONFIG.envelope[lang].join(""));
+    }
+  } catch (e) { /* draw with whatever face is available */ }
+  if (token !== penToken) return;
+  try { scene = buildScene(); } catch (e) { scene = null; }
+  if (!scene) { stage.classList.add("written"); return; }
+  runPen(token);
+}
+
+function refreshName() {
+  if (!scene) return;
+  try { scene = buildScene(); } catch (e) { return; }
+  if (scene) paintPen(scene.total, false);
 }
 
 function reseal() {
@@ -933,7 +1186,12 @@ function stop() {
   raf = null;
 }
 
-addEventListener("resize", () => { sizeCanvas(); seed(); }, { passive: true });
+let resizeT = null;
+addEventListener("resize", () => {
+  sizeCanvas(); seed();
+  clearTimeout(resizeT);
+  resizeT = setTimeout(refreshName, 220);
+}, { passive: true });
 document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
 
 /* ==========================================================

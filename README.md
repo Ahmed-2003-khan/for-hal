@@ -42,6 +42,19 @@ const CONFIG = {
 
 Aayat ka Arabic matan HTML mein hai — `class="verse__ar"` dhoond lein.
 
+### Lifafe par likha naam badalna
+`CONFIG.envelope` mein har zabaan ke liye ek array — **har entry ek satar**:
+
+```js
+envelope: {
+  en: ["My love,", "Halima"],
+  ur: ["میری جان", "حلیمہ"],
+  ar: ["حبيبتي",  "حليمة"]
+}
+```
+Teen sator bhi daal sakte hain; font size khud fit ho jata hai.
+Raftaar: `buildScene()` ke aakhir mein `dur` / `dd` / `DELAY in runPen()`.
+
 ### Default zabaan badalna
 Script mein `const DEFAULT_LANG = "ur";` — ise `"en"` ya `"ar"` kar dein.
 (Parhne wala khud koi zabaan chunay to wohi yaad rakhi jati hai.)
@@ -88,10 +101,14 @@ https://<USERNAME>.github.io/<REPO>/
   dono mirror ho jate hain.
 - **Envelope animation** — sealed envelope, wax seal, flap khulta hai, khat upar
   uthta hai. "Close the letter" se dobara seal ho jata hai.
-- **Naam khud likhta hai** — lifafe par «بنام / حلیمہ» qalam se likha jata hai.
-  Asli font ke glyphs ko ek moti stroke (`#penPath`) se mask kiya gaya hai, to
-  naam sirf wahan zahir hota hai jahan nib guzar chuki ho. Urdu/Arabic dayen se
-  bayen, English bayen se dayen. Raftaar: `DUR` / `DELAY` in `writeName()`.
+- **Qalam naam likhta hai** — lifafe par «بنام» ke neeche do sator likhi jati
+  hain. Naam pehle ek offscreen canvas par asli Nastaliq face mein likha jata
+  hai, phir syahi ke connected components nikale jate hain: bare = harf,
+  chhote alag-thalag = nuqte. Nib har column par syahi ke centroid par sawaar
+  ho kar chalti hai (is liye «ل» par charhti aur «ج» par utarti hai), satar
+  mukammal hone par **nuqte baad mein** lagte hain, phir qalam arc banata hua
+  agli satar par jata hai. Sab kuch `buildScene()` se khud nikalta hai — koi
+  path hard-code nahi, kisi bhi text/zabaan par chalta hai.
 - **Petals + hearts** — halka canvas engine, tab background mein jaye to khud ruk
   jata hai (battery bachane ke liye).
 - **Mobile-first** — `svh` units, safe-area insets (iPhone notch), 46px+ tap
