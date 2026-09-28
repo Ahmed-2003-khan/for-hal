@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ur" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -348,8 +348,8 @@ html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
 
 <header class="bar">
   <div class="langs" role="group" id="langs" aria-label="Language">
-    <button type="button" data-lang="en" aria-pressed="true">English</button>
-    <button type="button" data-lang="ur" class="f-ur" aria-pressed="false">اردو</button>
+    <button type="button" data-lang="en" aria-pressed="false">English</button>
+    <button type="button" data-lang="ur" class="f-ur" aria-pressed="true">اردو</button>
     <button type="button" data-lang="ar" class="f-ar" aria-pressed="false">العربية</button>
   </div>
 </header>
@@ -365,7 +365,7 @@ html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
       <span class="seal" aria-hidden="true">&#10084;</span>
     </button>
   </div>
-  <p class="hint" id="hint"><span class="tap-ico" aria-hidden="true">&#128072;</span><span data-t="tapHint">Tap to open</span></p>
+  <p class="hint" id="hint"><span class="tap-ico" aria-hidden="true">&#128072;</span><span data-t="tapHint">کھولنے کے لیے چھوئیں</span></p>
 </main>
 
 <!-- ===================== LETTER SCREEN ===================== -->
@@ -531,14 +531,12 @@ const els = {
 
 let lang = "en";
 
+const DEFAULT_LANG = "ur";   // page pehli baar is zabaan mein khulta hai
+
 function pickInitialLang() {
   let saved = null;
   try { saved = localStorage.getItem("letter-lang"); } catch (e) {}
-  if (saved && CONTENT[saved]) return saved;
-  const nav = (navigator.language || "en").toLowerCase();
-  if (nav.startsWith("ur")) return "ur";
-  if (nav.startsWith("ar")) return "ar";
-  return "en";
+  return (saved && CONTENT[saved]) ? saved : DEFAULT_LANG;
 }
 
 function paragraphs(list, host) {

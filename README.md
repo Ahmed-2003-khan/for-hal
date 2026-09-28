@@ -42,6 +42,10 @@ const CONFIG = {
 
 Aayat ka Arabic matan HTML mein hai — `class="verse__ar"` dhoond lein.
 
+### Default zabaan badalna
+Script mein `const DEFAULT_LANG = "ur";` — ise `"en"` ya `"ar"` kar dein.
+(Parhne wala khud koi zabaan chunay to wohi yaad rakhi jati hai.)
+
 ### Rang badalna
 `:root { ... }` ke andar CSS variables:
 `--rose`, `--rose-deep`, `--gold`, `--paper`, `--ink` waghera.
@@ -78,8 +82,8 @@ https://<USERNAME>.github.io/<REPO>/
 
 ## 3. Features
 
-- **3 zabaanein** — English, Urdu (Nastaliq), Arabic (Amiri). Choice `localStorage`
-  mein save hoti hai aur pehli baar browser ki zabaan se khud detect hoti hai.
+- **3 zabaanein** — English, Urdu (Nastaliq), Arabic (Amiri). Default **Urdu** hai;
+  parhne wale ki apni choice `localStorage` mein save ho jati hai.
 - **Poora RTL support** — `dir` attribute switch hota hai, alignment aur bullets
   dono mirror ho jate hain.
 - **Envelope animation** — sealed envelope, wax seal, flap khulta hai, khat upar
