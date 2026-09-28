@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Letter For Halima</title>
+<meta name="description" content="A letter, written for you — in English, Urdu and Arabic.">
+<meta name="theme-color" content="#fff5f2">
+<meta property="og:title" content="A Letter For Halima">
+<meta property="og:description" content="Tap to open.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%92%8C%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Nastaliq+Urdu:wght@400;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   A LETTER FOR YOU — single file, no build step.
+   Palette: rose & blush. Mobile first. EN / UR / AR.
+   ========================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+
+:root{
+  --bg-1:#fff6f3;
+  --bg-2:#ffe9ee;
+  --bg-3:#fce4da;
+  --paper:#fffaf7;
+  --paper-edge:#f3ddd3;
+  --ink:#4c2f2c;
+  --ink-soft:#8a6560;
+  --ink-faint:#b08e89;
+  --rose:#e2879a;
+  --rose-deep:#bf5d76;
+  --rose-light:#f8cdd6;
+  --gold:#c7a15a;
+  --radius:20px;
+  --shadow-lg:0 26px 60px -24px rgba(150,70,88,.45);
+  --shadow-sm:0 8px 24px -12px rgba(150,70,88,.40);
+  --bar-h:58px;
+}
+
+body{
+  min-height:100vh;
+  min-height:100svh;
+  font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(60vmax 60vmax at 12% -8%, #ffd9e2 0%, rgba(255,217,226,0) 62%),
+    radial-gradient(52vmax 52vmax at 92% 8%, #ffe6d5 0%, rgba(255,230,213,0) 60%),
+    radial-gradient(70vmax 70vmax at 50% 108%, #ffdce6 0%, rgba(255,220,230,0) 64%),
+    linear-gradient(170deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+
+/* ---------- falling petals ---------- */
+#petals{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+
+/* ---------- top bar / language switcher ---------- */
+.bar{
+  position:fixed; inset-inline:0; top:0; z-index:40;
+  display:flex; justify-content:center;
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;
+  background:linear-gradient(to bottom, rgba(255,246,243,.94), rgba(255,246,243,0));
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.langs{
+  display:flex; gap:2px; padding:4px;
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(191,93,118,.18);
+  border-radius:999px;
+  box-shadow:var(--shadow-sm);
+}
+.langs button{
+  appearance:none; border:0; cursor:pointer;
+  font:inherit; font-size:.86rem; font-weight:500;
+  color:var(--ink-soft);
+  padding:8px 15px; border-radius:999px;
+  background:transparent; min-height:38px;
+  transition:color .25s, background .25s;
+}
+.langs button[aria-pressed="true"]{
+  color:#fff;
+  background:linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  box-shadow:0 6px 16px -8px var(--rose-deep);
+}
+.langs button:focus-visible{outline:2px solid var(--rose-deep); outline-offset:2px}
+.langs .f-ur{font-family:'Noto Nastaliq Urdu',serif; font-size:.8rem; line-height:2}
+.langs .f-ar{font-family:'Amiri',serif; font-size:1rem}
+
+.screen{position:relative; z-index:10}
+.screen[hidden]{display:none !important}
+
+/* ================== ENVELOPE ================== */
+#stage{
+  min-height:100vh;
+  min-height:100svh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:34px;
+  padding:calc(var(--bar-h) + env(safe-area-inset-top) + 20px) 20px calc(40px + env(safe-area-inset-bottom));
+  transition:opacity .55s ease, transform .55s ease;
+}
+#stage.gone{opacity:0; transform:scale(.94); pointer-events:none}
+
+.env-wrap{perspective:1400px}
+.env{
+  position:relative;
+  width:min(84vw,360px);
+  aspect-ratio:1.5/1;
+  cursor:pointer; border:0; padding:0; background:none;
+  appearance:none; -webkit-appearance:none;
+  perspective:1200px; transform-style:preserve-3d;
+  animation:breathe 4.2s ease-in-out infinite;
+}
+.env:focus-visible{outline:3px solid var(--rose-deep); outline-offset:14px; border-radius:14px}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.env.open{animation:none; cursor:default}
+
+.env__back,.env__front,.env__flap{position:absolute; inset:0; border-radius:10px}
+.env__back{
+  background:linear-gradient(150deg,#f3b6c4 0%, #e08fa2 100%);
+  box-shadow:var(--shadow-lg); z-index:0;
+}
+.env__paper{
+  position:absolute; z-index:2;
+  inset-inline:7%; bottom:8%; height:86%;
+  background:linear-gradient(175deg,#fffdfb 0%, var(--paper) 60%, #fdeee7 100%);
+  border-radius:6px; overflow:hidden;
+  box-shadow:0 -6px 18px -8px rgba(150,70,88,.35);
+  transition:transform .85s cubic-bezier(.3,.9,.3,1);
+}
+.env__paper::before{
+  content:''; position:absolute; inset:14% 16%;
+  background:repeating-linear-gradient(to bottom, rgba(176,142,137,.3) 0 1.5px, transparent 1.5px 13px);
+  opacity:.55;
+}
+.env.open .env__paper{transform:translateY(-46%) scale(1.03)}
+
+.env__front{
+  z-index:3;
+  background:linear-gradient(160deg,#f7c3ce 0%, #eda7b8 100%);
+  clip-path:polygon(0 100%, 0 26%, 50% 70%, 100% 26%, 100% 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+}
+.env__flap{
+  z-index:5;
+  background:linear-gradient(170deg,#f2b2c1 0%, #e498ab 100%);
+  clip-path:polygon(0 0, 100% 0, 50% 72%);
+  transform-origin:top center;
+  transition:transform .8s cubic-bezier(.45,.05,.3,1), z-index 0s linear .4s;
+}
+.env.open .env__flap{transform:rotateX(178deg); z-index:1}
+
+.seal{
+  position:absolute; z-index:6;
+  top:58%; left:50%; transform:translate(-50%,-50%);
+  width:clamp(46px,13vw,58px); aspect-ratio:1; border-radius:50%;
+  display:grid; place-items:center; pointer-events:none;
+  background:radial-gradient(circle at 34% 30%, #e88ca0 0%, var(--rose-deep) 58%, #9c4159 100%);
+  color:#fff7f9; font-size:clamp(17px,4.6vw,21px);
+  box-shadow:0 6px 18px -6px rgba(140,55,75,.75), inset 0 2px 5px rgba(255,255,255,.35);
+  transition:transform .45s ease, opacity .45s ease;
+}
+.env.open .seal{transform:translate(-50%,-50%) scale(.2) rotate(120deg); opacity:0}
+
+.hint{
+  margin:0; text-align:center;
+  color:var(--ink-soft); font-size:.95rem; letter-spacing:.04em;
+  animation:pulse 2.6s ease-in-out infinite;
+  transition:opacity .35s;
+}
+.hint .tap-ico{display:block; font-size:1.3rem; margin-bottom:6px; opacity:.8}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+#stage.opening .hint{opacity:0}
+
+/* ================== LETTER ================== */
+#letterScreen{
+  padding:calc(var(--bar-h) + env(safe-area-inset-top) + 18px) 16px calc(28px + env(safe-area-inset-bottom));
+  display:flex; flex-direction:column; align-items:center;
+}
+.letter{
+  width:100%; max-width:660px; position:relative; overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 30%),
+    linear-gradient(172deg,#fffdfc 0%, var(--paper) 55%, #fdf0ea 100%);
+  border:1px solid var(--paper-edge);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);
+  padding:clamp(22px,6vw,46px) clamp(20px,5.5vw,44px) clamp(28px,6vw,48px);
+  text-align:start;
+}
+.letter::before{
+  content:''; position:absolute; inset-inline:0; top:0; height:4px;
+  background:linear-gradient(90deg,var(--rose-light),var(--rose),var(--gold),var(--rose),var(--rose-light));
+  opacity:.75;
+}
+
+.dateline{
+  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-faint); margin:0 0 22px;
+}
+.greeting{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.55rem,6.4vw,2.3rem);
+  font-weight:600; line-height:1.3;
+  color:var(--rose-deep); margin:0 0 20px;
+}
+.letter p.body{
+  margin:0 0 1.15em;
+  font-size:clamp(1rem,4.1vw,1.09rem);
+  line-height:1.85; color:var(--ink);
+}
+
+.verse{
+  margin:26px 0 28px;
+  padding:20px clamp(16px,4.4vw,24px);
+  border-radius:14px; position:relative;
+  background:linear-gradient(160deg, rgba(255,240,244,.9), rgba(255,247,238,.9));
+  border:1px solid rgba(199,161,90,.3);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+}
+.verse__ar{
+  font-family:'Amiri',serif; direction:rtl; text-align:center;
+  font-size:clamp(1.22rem,5.4vw,1.5rem);
+  line-height:2.05; color:#7a4a33; margin:0;
+}
+.verse__tr{
+  margin:14px 0 0; text-align:center;
+  font-size:clamp(.92rem,3.7vw,1rem); line-height:1.75;
+  color:var(--ink-soft); font-style:italic;
+}
+.verse__ref{
+  display:block; margin-top:12px; text-align:center;
+  font-size:.76rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); font-style:normal;
+}
+
+.promise-intro{margin:26px 0 14px !important; font-weight:500}
+.promises{list-style:none; margin:0 0 6px; padding:0}
+.promises li{
+  position:relative; padding-inline-start:30px; margin-bottom:14px;
+  font-size:clamp(.97rem,3.9vw,1.05rem); line-height:1.8; color:var(--ink);
+}
+.promises li::before{
+  content:'\2661'; position:absolute; inset-inline-start:0; top:0;
+  color:var(--rose); font-size:1.05em;
+}
+
+.rule{border:0; height:1px; margin:30px auto; width:56%;
+  background:linear-gradient(90deg,transparent,var(--rose-light),transparent)}
+.closing{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.15rem,4.7vw,1.4rem);
+  font-style:italic; line-height:1.6;
+  color:var(--rose-deep); margin:0 0 8px;
+}
+.signoff{
+  margin:18px 0 2px; font-size:.86rem; letter-spacing:.06em;
+  color:var(--ink-soft);
+}
+.sign{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,6vw,2rem);
+  font-weight:600; color:var(--ink); margin:4px 0 0;
+}
+.ps{margin:26px 0 0; font-size:.92rem; line-height:1.75;
+  color:var(--ink-soft); font-style:italic}
+
+.actions{display:flex; flex-wrap:wrap; gap:12px; justify-content:center;
+  margin:30px auto 8px; max-width:660px}
+.btn{
+  appearance:none; font:inherit; cursor:pointer;
+  border-radius:999px; padding:13px 24px; min-height:46px;
+  font-size:.92rem; font-weight:500;
+  transition:transform .2s ease, box-shadow .25s ease, background .25s;
+}
+.btn:active{transform:scale(.96)}
+.btn--love{border:0; color:#fff;
+  background:linear-gradient(135deg,var(--rose) 0%, var(--rose-deep) 100%);
+  box-shadow:0 12px 26px -14px var(--rose-deep)}
+.btn--ghost{background:rgba(255,255,255,.7);
+  border:1px solid rgba(191,93,118,.28); color:var(--rose-deep)}
+.btn:focus-visible{outline:2px solid var(--rose-deep); outline-offset:3px}
+
+.credit{text-align:center; margin:22px 0 0;
+  font-size:.74rem; letter-spacing:.1em; color:var(--ink-faint)}
+
+.reveal{opacity:0; transform:translateY(16px);
+  animation:rise .75s cubic-bezier(.22,.8,.3,1) forwards}
+@keyframes rise{to{opacity:1; transform:none}}
+
+/* ============ per-script typography ============ */
+html[lang="ur"] .letter p.body,
+html[lang="ur"] .promises li,
+html[lang="ur"] .ps,
+html[lang="ur"] .verse__tr{
+  font-family:'Noto Nastaliq Urdu',serif;
+  line-height:2.75; font-size:clamp(.94rem,3.75vw,1.02rem); font-style:normal;
+}
+html[lang="ur"] .greeting,
+html[lang="ur"] .closing,
+html[lang="ur"] .sign{
+  font-family:'Noto Nastaliq Urdu',serif;
+  line-height:2.1; font-style:normal;
+  font-size:clamp(1.18rem,4.8vw,1.55rem);
+}
+html[lang="ur"] .sign{font-size:clamp(1.3rem,5.2vw,1.7rem)}
+html[lang="ur"] .signoff{font-family:'Noto Nastaliq Urdu',serif; line-height:2.2; letter-spacing:0}
+html[lang="ur"] .hint,
+html[lang="ur"] .btn,
+html[lang="ur"] .dateline{font-family:'Noto Nastaliq Urdu',serif; line-height:2.1}
+html[lang="ur"] .dateline{text-transform:none; letter-spacing:0}
+
+html[lang="ar"] .letter p.body,
+html[lang="ar"] .promises li,
+html[lang="ar"] .ps,
+html[lang="ar"] .verse__tr{
+  font-family:'Amiri',serif; line-height:2.15;
+  font-size:clamp(1.1rem,4.5vw,1.22rem); font-style:normal;
+}
+html[lang="ar"] .greeting,
+html[lang="ar"] .closing,
+html[lang="ar"] .sign{font-family:'Amiri',serif; font-style:normal}
+html[lang="ar"] .signoff{font-family:'Amiri',serif; font-size:.98rem}
+html[lang="ar"] .hint,
+html[lang="ar"] .btn,
+html[lang="ar"] .dateline{font-family:'Amiri',serif}
+html[lang="ar"] .dateline{text-transform:none; letter-spacing:.04em}
+
+html[dir="rtl"] .promises li::before{transform:scaleX(-1)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+  .reveal{opacity:1; transform:none}
+}
+@media (min-width:700px){:root{--bar-h:64px}}
+</style>
+</head>
+<body>
+
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<header class="bar">
+  <div class="langs" role="group" id="langs" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-lang="ur" class="f-ur" aria-pressed="false">اردو</button>
+    <button type="button" data-lang="ar" class="f-ar" aria-pressed="false">العربية</button>
+  </div>
+</header>
+
+<!-- ===================== ENVELOPE SCREEN ===================== -->
+<main class="screen" id="stage">
+  <div class="env-wrap">
+    <button class="env" id="env" type="button">
+      <span class="env__back"></span>
+      <span class="env__paper"></span>
+      <span class="env__front"></span>
+      <span class="env__flap"></span>
+      <span class="seal" aria-hidden="true">&#10084;</span>
+    </button>
+  </div>
+  <p class="hint" id="hint"><span class="tap-ico" aria-hidden="true">&#128072;</span><span data-t="tapHint">Tap to open</span></p>
+</main>
+
+<!-- ===================== LETTER SCREEN ===================== -->
+<main class="screen" id="letterScreen" hidden>
+  <article class="letter" id="letter" tabindex="-1">
+    <p class="dateline" data-t="dateline"></p>
+    <h1 class="greeting" data-t="greeting"></h1>
+    <div id="paras"></div>
+
+    <blockquote class="verse">
+      <p class="verse__ar">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</p>
+      <p class="verse__tr" id="verseTr"></p>
+      <cite class="verse__ref" id="verseRef"></cite>
+    </blockquote>
+
+    <div id="parasAfter"></div>
+
+    <p class="body promise-intro" data-t="promiseIntro"></p>
+    <ul class="promises" id="promises"></ul>
+
+    <hr class="rule">
+    <p class="closing" data-t="closing"></p>
+    <p class="signoff" data-t="signOff"></p>
+    <p class="sign" id="sign"></p>
+    <p class="ps" data-t="ps"></p>
+  </article>
+
+  <div class="actions">
+    <button class="btn btn--love" id="loveBtn" type="button" data-t="loveBtn"></button>
+    <button class="btn btn--ghost" id="resealBtn" type="button" data-t="reseal"></button>
+  </div>
+  <p class="credit" data-t="credit"></p>
+</main>
+
+<script>
+/* ==========================================================
+   1. CONFIG — edit these two lines and you are done.
+   ========================================================== */
+const CONFIG = {
+  // Who it is for (used inside the greeting)
+  to:   { en: "Halima", ur: "حلیمہ", ar: "حليمة" },
+  // Who it is from (the signature)
+  from: { en: "Ahmed",  ur: "احمد",  ar: "أحمد" },
+  // Small line above the greeting
+  date: { en: "Written for you",  ur: "تمہارے نام",  ar: "كُتِبت لكِ" }
+};
+
+/* ==========================================================
+   2. CONTENT
+   ========================================================== */
+const CONTENT = {
+  en: {
+    dir: "ltr",
+    tapHint: "Tap to open",
+    greeting: "Assalamu Alaikum, {to} —",
+    before: [
+      "Long before I knew your name, I was already asking Allah for you. I did not know your face, or the sound of your laugh, or the particular way you say my name when you are half asleep. But He knew. And while I was still learning how to ask, He had already written you into my life.",
+      "There is a verse I used to recite the way one recites poetry — beautiful, but distant, as though it belonged to someone else's life."
+    ],
+    verseTr: "“And among His signs is that He created for you mates from among yourselves, that you may find tranquillity in them; and He placed between you affection and mercy.”",
+    verseRef: "Surah Ar-Rum, 30:21",
+    after: [
+      "Then you came, and it stopped being poetry. It became a plain description of my ordinary days.",
+      "Sukoon. That is the word. Not noise, not excitement — sukoon. On the days when the world is loud and I have nothing left to give anyone, I come home to you and the noise simply sets, the way the sun does. You are the quietest proof I have ever been given that Allah listens."
+    ],
+    promiseIntro: "So let me promise you a few things, plainly, with Allah as my witness:",
+    promises: [
+      "To be gentle with you — especially on the days you find it hard to be gentle with yourself.",
+      "To guard your heart, your honour and your peace the way I would guard my own.",
+      "To be your friend first: the one you tell things to before anyone else.",
+      "To choose you again, deliberately, every single morning.",
+      "To ask Allah for you in every sujood, for as long as I have a forehead to place on the ground."
+    ],
+    closing: "And when this short life is folded up and put away, I will be at the gates of Jannah, asking after you — looking for the same face. Ask for me too.",
+    ps: "P.S. — Read this again whenever you forget. I meant every single word.",
+    signOff: "Yours, in this life and the next —",
+    loveBtn: "I love you ♥",
+    reseal: "Close the letter",
+    credit: "MADE WITH LOVE",
+    langLabel: "Language"
+  },
+
+  ur: {
+    dir: "rtl",
+    tapHint: "کھولنے کے لیے چھوئیں",
+    greeting: "السلام علیکم، {to} —",
+    before: [
+      "تمہارا نام جاننے سے بہت پہلے، میں اللہ سے تمہیں مانگ رہا تھا۔ نہ تمہارا چہرہ معلوم تھا، نہ تمہاری ہنسی کی آواز، اور نہ وہ انداز جس سے تم نیم خوابی میں میرا نام لیتی ہو۔ مگر اُسے سب معلوم تھا۔ اور جب میں مانگنا سیکھ ہی رہا تھا، وہ تمہیں میری زندگی میں لکھ چکا تھا۔",
+      "ایک آیت تھی جسے میں شاعری کی طرح پڑھا کرتا تھا — خوبصورت، مگر کہیں دور کی بات، جیسے کسی اور کی زندگی کا ذکر ہو۔"
+    ],
+    verseTr: "”اور اُس کی نشانیوں میں سے یہ ہے کہ اُس نے تمہارے لیے تمہی میں سے جوڑے بنائے تاکہ تم اُن کے پاس سکون پاؤ، اور تمہارے درمیان محبت اور رحمت رکھ دی۔“",
+    verseRef: "سورۃ الروم ۔ ۳۰:۲۱",
+    after: [
+      "پھر تم آئیں، اور وہ شاعری نہ رہی۔ وہ میرے عام سے دنوں کی سیدھی سادی تفصیل بن گئی۔",
+      "سکون۔ بس یہی لفظ ہے۔ نہ شور، نہ ہنگامہ — صرف سکون۔ جن دنوں دنیا بہت اونچی آواز میں بولتی ہے اور میرے پاس کسی کو دینے کے لیے کچھ نہیں بچتا، میں گھر لوٹتا ہوں اور سارا شور یوں ڈوب جاتا ہے جیسے سورج۔ تم اِس بات کی سب سے خاموش دلیل ہو کہ اللہ سنتا ہے۔"
+    ],
+    promiseIntro: "تو چند وعدے، صاف لفظوں میں، اللہ کو گواہ بنا کر:",
+    promises: [
+      "کہ تمہارے ساتھ نرمی سے پیش آؤں گا — خاص کر اُن دنوں میں جب تم خود اپنے ساتھ نرم نہ ہو پاؤ۔",
+      "کہ تمہارے دل، تمہاری عزت اور تمہارے سکون کی حفاظت ویسے ہی کروں گا جیسے اپنی۔",
+      "کہ پہلے تمہارا دوست رہوں گا — وہ جسے تم ہر بات سب سے پہلے بتاؤ۔",
+      "کہ ہر صبح، جان بوجھ کر، دوبارہ تمہیں ہی چنوں گا۔",
+      "کہ ہر سجدے میں تمہیں مانگتا رہوں گا، جب تک ماتھا زمین پر رکھنے کی توفیق باقی ہے۔"
+    ],
+    closing: "اور جب یہ مختصر سی زندگی تہہ کر کے رکھ دی جائے گی، میں جنت کے دروازے پر تمہارا پتا پوچھ رہا ہوں گا — وہی چہرہ ڈھونڈتا ہوا۔ تم بھی میرا پوچھ لینا۔",
+    ps: "پس نوشت: جب کبھی بھول جاؤ، اِسے دوبارہ پڑھ لینا۔ ہر لفظ سچ ہے۔",
+    signOff: "تمہارا، اِس زندگی میں بھی اور اُس میں بھی —",
+    loveBtn: "مجھے تم سے محبت ہے ♥",
+    reseal: "خط بند کر دیں",
+    credit: "محبت سے بنایا گیا",
+    langLabel: "زبان"
+  },
+
+  ar: {
+    dir: "rtl",
+    tapHint: "المسي لتفتحي الرسالة",
+    greeting: "السلامُ عليكِ، {to} —",
+    before: [
+      "قبل أن أعرفَ اسمَكِ بزمنٍ طويل، كنتُ أسألُ اللهَ أن يرزقَني إيّاكِ. لم أكن أعرفُ وجهَكِ، ولا صوتَ ضحكتِكِ، ولا تلك الطريقةَ التي تنادينَني بها وأنتِ بين النومِ واليقظة. لكنّه سبحانه كان يعلم. وبينما كنتُ أتعلّمُ كيف أسأل، كان قد كتبَكِ في حياتي.",
+      "كانت هناك آيةٌ أتلوها كما يُتلى الشِّعر — جميلةٌ، لكنّها بعيدة، وكأنّها من حياةِ شخصٍ آخر."
+    ],
+    verseTr: "",
+    verseRef: "سورة الروم ـ ٣٠:٢١",
+    after: [
+      "ثم جئتِ، فلم تعد شِعرًا؛ صارت وصفًا بسيطًا لأيّامي العاديّة.",
+      "السَّكَن. هذه هي الكلمة. لا ضجيجَ ولا صخب — سَكَنٌ فحسب. في الأيّام التي تعلو فيها أصواتُ الدنيا ولا يبقى عندي ما أُعطيه لأحد، أعودُ إليكِ فيغيبُ الضجيجُ كما تغيبُ الشمس. أنتِ أهدأُ دليلٍ أُعطيتُه على أنّ اللهَ يسمع."
+    ],
+    promiseIntro: "فدعيني أَعِدُكِ بأشياءَ قليلة، بوضوح، واللهُ شهيد:",
+    promises: [
+      "أن أَرفُقَ بكِ — وبخاصّةٍ في الأيّام التي يصعُبُ عليكِ فيها أن ترفُقي بنفسِكِ.",
+      "أن أحفظَ قلبَكِ وعِرضَكِ وسكينتَكِ كما أحفظُ نفسي.",
+      "أن أكونَ صديقَكِ أوّلًا: الذي تُحدِّثينه قبل الناسِ جميعًا.",
+      "أن أختارَكِ من جديد، عن قصدٍ، كلَّ صباح.",
+      "أن أسألَ اللهَ أن يجمعَني بكِ في كلِّ سجود، ما دامت لي جبهةٌ أضعُها على الأرض."
+    ],
+    closing: "وحين تُطوى هذه الحياةُ القصيرة، سأكونُ على أبوابِ الجنّةِ أسألُ عنكِ — أبحثُ عن الوجهِ نفسِه. فاسألي عنّي أنتِ أيضًا.",
+    ps: "ملحوظة: اقرئيها مرّةً أخرى كلّما نسيتِ. كلُّ حرفٍ فيها صِدق.",
+    signOff: "لكِ، في هذه الحياةِ وفي التي تبقى —",
+    loveBtn: "أُحبُّكِ ♥",
+    reseal: "أغلقي الرسالة",
+    credit: "صُنعت بحب",
+    langLabel: "اللغة"
+  }
+};
+
+/* ==========================================================
+   3. LANGUAGE ENGINE
+   ========================================================== */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+const els = {
+  html: document.documentElement,
+  langs: $("#langs"),
+  paras: $("#paras"),
+  parasAfter: $("#parasAfter"),
+  promises: $("#promises"),
+  verseTr: $("#verseTr"),
+  verseRef: $("#verseRef"),
+  sign: $("#sign"),
+  verse: $(".verse")
+};
+
+let lang = "en";
+
+function pickInitialLang() {
+  let saved = null;
+  try { saved = localStorage.getItem("letter-lang"); } catch (e) {}
+  if (saved && CONTENT[saved]) return saved;
+  const nav = (navigator.language || "en").toLowerCase();
+  if (nav.startsWith("ur")) return "ur";
+  if (nav.startsWith("ar")) return "ar";
+  return "en";
+}
+
+function paragraphs(list, host) {
+  host.innerHTML = "";
+  list.forEach(text => {
+    const p = document.createElement("p");
+    p.className = "body";
+    p.textContent = text;
+    host.appendChild(p);
+  });
+}
+
+function applyLang(next, animate) {
+  lang = next;
+  const c = CONTENT[lang];
+
+  els.html.lang = lang;
+  els.html.dir = c.dir;
+  els.langs.setAttribute("aria-label", c.langLabel);
+  env.setAttribute("aria-label", c.tapHint);
+
+  $$("#langs button").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang))
+  );
+
+  // simple [data-t] bindings, with {to} token support
+  $$("[data-t]").forEach(el => {
+    let v = c[el.dataset.t] ?? CONFIG[el.dataset.t]?.[lang] ?? "";
+    if (el.dataset.t === "dateline") v = CONFIG.date[lang];
+    v = String(v).replace("{to}", CONFIG.to[lang]);
+    el.textContent = v;
+  });
+
+  paragraphs(c.before, els.paras);
+  paragraphs(c.after, els.parasAfter);
+
+  els.promises.innerHTML = "";
+  c.promises.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    els.promises.appendChild(li);
+  });
+
+  els.verseTr.textContent = c.verseTr;
+  els.verseTr.hidden = !c.verseTr;
+  els.verseRef.textContent = c.verseRef;
+  els.sign.textContent = CONFIG.from[lang];
+
+  try { localStorage.setItem("letter-lang", lang); } catch (e) {}
+
+  if (animate) staggerReveal();
+}
+
+function staggerReveal() {
+  const nodes = [
+    $(".dateline"), $(".greeting"),
+    ...$$("#paras .body"), els.verse, ...$$("#parasAfter .body"),
+    $(".promise-intro"), ...$$("#promises li"),
+    $(".rule"), $(".closing"), $(".signoff"), $(".sign"), $(".ps"), $(".actions")
+  ].filter(Boolean);
+
+  nodes.forEach((n, i) => {
+    n.classList.remove("reveal");
+    void n.offsetWidth;                 // restart the animation
+    n.style.animationDelay = Math.min(i * 55, 900) + "ms";
+    n.classList.add("reveal");
+  });
+}
+
+els.langs.addEventListener("click", e => {
+  const btn = e.target.closest("button[data-lang]");
+  if (!btn || btn.dataset.lang === lang) return;
+  applyLang(btn.dataset.lang, !$("#letterScreen").hidden);
+});
+
+/* ==========================================================
+   4. ENVELOPE → LETTER
+   ========================================================== */
+const stage = $("#stage");
+const env = $("#env");
+const letterScreen = $("#letterScreen");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+let busy = false;
+
+function openLetter() {
+  if (busy || env.classList.contains("open")) return;
+  busy = true;
+  env.classList.add("open");
+  stage.classList.add("opening");
+  burst(innerWidth / 2, innerHeight / 2, 16);
+
+  const t1 = reduced ? 0 : 1250;
+  setTimeout(() => {
+    stage.classList.add("gone");
+    setTimeout(() => {
+      stage.hidden = true;
+      letterScreen.hidden = false;
+      window.scrollTo({ top: 0, behavior: "auto" });
+      staggerReveal();
+      $("#letter").focus({ preventScroll: true });
+      busy = false;
+    }, reduced ? 0 : 520);
+  }, t1);
+}
+
+function reseal() {
+  letterScreen.hidden = true;
+  stage.hidden = false;
+  stage.classList.remove("gone", "opening");
+  void stage.offsetWidth;
+  env.classList.remove("open");
+  window.scrollTo({ top: 0, behavior: "auto" });
+  env.focus({ preventScroll: true });
+}
+
+env.addEventListener("click", openLetter);
+$("#resealBtn").addEventListener("click", reseal);
+$("#loveBtn").addEventListener("click", e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  burst(r.left + r.width / 2, r.top + r.height / 2, 22);
+});
+
+/* ==========================================================
+   5. PETALS + HEARTS (lightweight canvas)
+   ========================================================== */
+const cvs = $("#petals");
+const ctx = cvs.getContext("2d");
+let W = 0, H = 0, dpr = 1, parts = [], bursts = [], raf = null;
+
+function sizeCanvas() {
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cvs.width = Math.floor(W * dpr);
+  cvs.height = Math.floor(H * dpr);
+  cvs.style.width = W + "px";
+  cvs.style.height = H + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+const rnd = (a, b) => a + Math.random() * (b - a);
+const TINTS = ["226,135,154", "248,205,214", "240,168,185", "199,161,90", "255,255,255"];
+
+function makePart(seeded) {
+  return {
+    x: rnd(0, W),
+    y: seeded ? rnd(-H, H) : rnd(-80, -10),
+    s: rnd(6, 13),
+    vy: rnd(18, 46),           // px per second
+    vx: rnd(-14, 14),
+    sway: rnd(0.4, 1.1),
+    phase: rnd(0, Math.PI * 2),
+    rot: rnd(0, Math.PI * 2),
+    vr: rnd(-0.7, 0.7),
+    tint: TINTS[(Math.random() * TINTS.length) | 0],
+    alpha: rnd(0.35, 0.8),
+    heart: Math.random() < 0.34
+  };
+}
+
+function seed() {
+  const n = W < 520 ? 16 : W < 900 ? 24 : 32;
+  parts = Array.from({ length: n }, () => makePart(true));
+}
+
+function petalPath(c, s) {
+  c.beginPath();
+  c.moveTo(0, -s);
+  c.bezierCurveTo(s * 0.85, -s * 0.6, s * 0.7, s * 0.65, 0, s);
+  c.bezierCurveTo(-s * 0.7, s * 0.65, -s * 0.85, -s * 0.6, 0, -s);
+  c.closePath();
+}
+
+function heartPath(c, s) {
+  const k = s * 0.92;
+  c.beginPath();
+  c.moveTo(0, k * 0.72);
+  c.bezierCurveTo(-k * 1.35, -k * 0.2, -k * 0.5, -k * 1.15, 0, -k * 0.42);
+  c.bezierCurveTo(k * 0.5, -k * 1.15, k * 1.35, -k * 0.2, 0, k * 0.72);
+  c.closePath();
+}
+
+function drawOne(p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.rot);
+  ctx.globalAlpha = p.alpha;
+  ctx.fillStyle = "rgba(" + p.tint + ",1)";
+  (p.heart ? heartPath : petalPath)(ctx, p.s);
+  ctx.fill();
+  ctx.restore();
+}
+
+function burst(x, y, n) {
+  if (reduced) return;
+  for (let i = 0; i < n; i++) {
+    bursts.push({
+      x, y,
+      vx: rnd(-150, 150),
+      vy: rnd(-260, -70),
+      s: rnd(7, 14),
+      rot: rnd(0, 6.28),
+      vr: rnd(-3, 3),
+      life: 1,
+      tint: TINTS[(Math.random() * 3) | 0],
+      heart: true,
+      alpha: 1
+    });
+  }
+  if (!raf) raf = requestAnimationFrame(loop);
+}
+
+let last = 0;
+function loop(ts) {
+  const dt = Math.min((ts - last) / 1000 || 0, 0.05);
+  last = ts;
+  ctx.clearRect(0, 0, W, H);
+
+  for (const p of parts) {
+    p.y += p.vy * dt;
+    p.phase += dt * p.sway;
+    p.x += (p.vx + Math.sin(p.phase) * 18) * dt;
+    p.rot += p.vr * dt;
+    if (p.y - p.s > H) Object.assign(p, makePart(false));
+    if (p.x < -40) p.x = W + 30;
+    if (p.x > W + 40) p.x = -30;
+    drawOne(p);
+  }
+
+  for (let i = bursts.length - 1; i >= 0; i--) {
+    const b = bursts[i];
+    b.vy += 380 * dt;
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+    b.rot += b.vr * dt;
+    b.life -= dt * 0.55;
+    b.alpha = Math.max(b.life, 0);
+    if (b.life <= 0 || b.y > H + 60) { bursts.splice(i, 1); continue; }
+    drawOne(b);
+  }
+
+  raf = requestAnimationFrame(loop);
+}
+
+function start() {
+  if (raf) return;
+  last = performance.now();
+  raf = requestAnimationFrame(loop);
+}
+function stop() {
+  if (raf) cancelAnimationFrame(raf);
+  raf = null;
+}
+
+addEventListener("resize", () => { sizeCanvas(); seed(); }, { passive: true });
+document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+
+/* ==========================================================
+   6. BOOT
+   ========================================================== */
+sizeCanvas();
+if (reduced) {
+  seed();
+  ctx.clearRect(0, 0, W, H);
+  parts.forEach(p => { p.alpha *= 0.6; drawOne(p); });
+} else {
+  seed();
+  start();
+}
+applyLang(pickInitialLang(), false);
+</script>
+</body>
+</html>
